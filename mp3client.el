@@ -183,7 +183,7 @@
         (mp3-client-send-message
          (concat "seek "
                  (number-to-string
-                  (+ music-time 3))))))
+                  (+ mu)sic-time 3))))))
 
 (defun mp3-client-seek--3sec ()
   (interactive)
