@@ -176,21 +176,23 @@
   (interactive)
   (mp3-client-send-message "stop"))
 
-(defmacro mp3-client-seek-sec (func-name sec)
-  `(defun ,(make-symbol
-           (concat "mp3-client-seek-"
-                   func-name
-                   (number-to-string sec))) ()
-     (interactive)
-     (let ((music-time (mp3-client-get-current-music-time)))
-       (if music-time
-           (mp3-client-send-message
-            (concat "seek "
-                    (number-to-string
-                     (,func-name music-time ,sec))))))))
+(defun mp3-client-seek-+3sec ()
+  (interactive)
+  (let ((music-time (mp3-client-get-current-music-time)))
+    (if music-time
+        (mp3-client-send-message
+         (concat "seek "
+                 (number-to-string
+                  (+ music-time 3))))))
 
-(mp3-client-seek-sec "+" 3)
-(mp3-client-seek-sec "-" 3)
+(defun mp3-client-seek--3sec ()
+  (interactive)
+  (let ((music-time (mp3-client-get-current-music-time)))
+    (if music-time
+        (mp3-client-send-message
+         (concat "seek "
+                 (number-to-string
+                  (- music-time 3)))))))
 
 (defun mp3-client-get-current-music-time ()
   "Get the current time of music."

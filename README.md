@@ -39,9 +39,9 @@ Stop music:
 (mp3-client-stop-music)
 
 Go ahead three seconds:
-(mp3-client-seek-+3)
+(mp3-client-seek-+3sec)
 
 Go back three seconds:
-(mp3-client-seek--3)
+(mp3-client-seek--3sec)
 
 And this is my first program which written in emacs lisp.
