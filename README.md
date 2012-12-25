@@ -7,10 +7,13 @@ https://github.com/zhenze12345/mp3server.
 Usage:
 Add (require 'mp3client) to your .emacs file.
 
-All the function of mp3client with a prefix of "mp3-client-".
+All the name of function contain prefix called "mp3-client-".
 
 Start connect:
 (mp3-client-start)
+After run this function without error, it will create a buffer
+called "*mp3-client*", and you can choose music with mouse clicked
+or with keyboard enter.
 
 Stop connect:
 (mp3-client-stop)
