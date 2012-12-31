@@ -10,6 +10,9 @@ Add (require 'mp3client) to your .emacs file.
 
 All the name of function contain prefix called "mp3-client-".
 
+Play or pause music:
+(mp3-client-play-or-pause)
+
 Start connect:
 (mp3-client-start)
 

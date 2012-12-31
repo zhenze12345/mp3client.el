@@ -97,28 +97,43 @@
 
 (defun mp3-client-update-mode-line (msg)
   "Update music status in mode line."
-  (string-match "[play|pause|stop] \\(.*\\)\.mp3 \\([0-9.]+\\) \\([0-9.]+\\)" msg)
-  (let ((music-name
+  (string-match "\\(play\\|stop\\|pause\\) \\(.*\\)\.mp3 \\([0-9.]+\\) \\([0-9.]+\\)" msg)
+  (let ((status
          (substring msg
                     (match-beginning 1)
                     (match-end 1)))
+        (music-name
+         (substring msg
+                    (match-beginning 2)
+                    (match-end 2)))
         (passed-time
-         (string-to-number
-          (substring msg
-                     (match-beginning 2)
-                     (match-end 2))))
-        (last-time
          (string-to-number
           (substring msg
                      (match-beginning 3)
                      (match-end 3))))
+        (last-time
+         (string-to-number
+          (substring msg
+                     (match-beginning 4)
+                     (match-end 4))))
         total-time)
     (setf total-time (+ passed-time last-time))
     (setf mp3-client-mode-line-value
-          (format " %s %.1f/%.1fs "
+          (format " %s[%s] %.1f/%.1fs "
                   music-name
+                  status
                   passed-time
                   total-time))))
+
+(defun mp3-client-get-music-status ()
+  "Get music status: play, pause or stop."
+  (if (string-match
+       "\\[\\(.*\\)\\]"
+       mp3-client-mode-line-value)
+      (substring mp3-client-mode-line-value
+                 (match-beginning 1)
+                 (match-end 1))
+    nil))
 
 (defun mp3-client-network-client-start ()
   "Start network work of mp3 client."
@@ -257,6 +272,16 @@
         (delete-process proc))
     (if buffer
         (kill-buffer buffer))))
+
+(defun mp3-client-play-or-pause ()
+  "play or pause music"
+  (interactive)
+  (let ((status (mp3-client-get-music-status)))
+    (cond ((string= status "play")
+           (mp3-client-pause-music))
+          ((or (string= status "pause")
+               (string= status "stop"))
+           (mp3-client-play-music)))))
 
 (provide 'mp3client)
 ;;; mp3client.el ends here
