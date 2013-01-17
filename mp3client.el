@@ -54,7 +54,7 @@
 
 (defun mp3-client-sentinel (proc string)
   (message (concat mp3-client-process-name " " string))
-  (if (string= string "connection broken by remote peer")
+  (if (string= string "connection broken by remote peer\n")
       (mp3-client-stop)))
 
 (defun mp3-client-refresh-music-list (msg)
@@ -254,6 +254,14 @@
           t)
       nil)))
 
+(defun mp3-client-remove-mode-line ()
+  "Remove mode line."
+  (setf mode-line-format
+        (remove-if `(lambda (x)
+                      (equal x 'mp3-client-mode-line-value))
+                   mode-line-format))
+  (setq-default mode-line-format mode-line-format))
+
 (defun mp3-client-stop ()
   "Stop mp3 client."
   (interactive)
@@ -261,10 +269,7 @@
       (progn
         (cancel-timer mp3-client-get-status-timer)
         (setf mp3-client-get-status-timer)))
-  (setf mode-line-format
-        (remove-if `(lambda (x)
-                      (equal x 'mp3-client-mode-line-value))
-                   mode-line-format))
+  (mp3-client-remove-mode-line)
   (setq-default mode-line-format mode-line-format)
   (let ((proc (get-process mp3-client-process-name))
         (buffer (get-buffer mp3-client-buffer-name)))
